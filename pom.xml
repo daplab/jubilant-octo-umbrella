@@ -19,11 +19,6 @@
 			<name>Maven Central Repo</name>
 			<url>https://repo1.maven.org/maven2</url>
 		</repository>
-		<repository>
-			<id>Artifactory Virtual Repo</id>
-			<name>Artifactory Virtual Repo</name>
-			<url>***REMOVED***</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
@@ -43,11 +38,6 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.evanwong.oss</groupId>
-			<artifactId>hipchat-java</artifactId>
-			<version>0.4.1</version>
 		</dependency>
 	</dependencies>
 
