@@ -12,6 +12,8 @@
 		<slf4j.version>1.7.5</slf4j.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.version>3.5.1</maven.compiler.version>
+		<maven.compiler.version>3.5.1</maven.compiler.version>
 		<apache.hadoop.version>2.7.1.2.4.2.0-258</apache.hadoop.version>
 	</properties>
 	<repositories>
@@ -124,5 +126,68 @@
 			<version>2.8.2</version>
 		</dependency>
 	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>${project.build.directory}/lib</outputDirectory>
+					<!-- See here for more details https://gist.github.com/killerwhile/95c49fb0af0e938de222 -->
+					<excludeArtifactIds>
+						activation,ant-contrib,aopalliance,asm,avro,avro-compiler,cloudera-jets3t,commons-beanutils,commons-beanutils-core,commons-cli,commons-codec,commons-collections,commons-compress,commons-configuration,commons-daemon,commons-digester,commons-el,commons-httpclient,commons-io,commons-lang,commons-logging,commons-math,commons-net,datafu,guice,guice-servlet,hadoop-annotations,hadoop-ant,hadoop-auth,hadoop-common,hadoop-core,hadoop-examples,hadoop-fairscheduler,hadoop-hdfs,hadoop-lzo-cdh4,hadoop-test,hadoop-tools,hadoop-yarn-api,hadoop-yarn-applications-distributedshell,hadoop-yarn-applications-unmanaged-am-launcher,hadoop-yarn-client,hadoop-yarn-common,hadoop-yarn-server-common,hadoop-yarn-server-nodemanager,hadoop-yarn-server-resourcemanager,hadoop-yarn-server-tests,hadoop-yarn-server-web-proxy,hadoop-yarn-site,hsqldb,hue-plugins,jackson-core-asl,jackson-jaxrs,jackson-mapper-asl,jackson-xc,jasper-compiler,jasper-runtime,javax.inject,jaxb-api,jaxb-impl,jersey-core,jersey-guice,jersey-json,jersey-server,jets3t,jettison,jetty,jetty-util,jline,jsch,jsp-api,jsr305,junit,kfs,log4j,mockito-all,netty,paranamer,parquet-avro,parquet-cascading,parquet-column,parquet-common,parquet-encoding,parquet-format,parquet-generator,parquet-hadoop,parquet-hive,parquet-pig,parquet-pig-bundle,parquet-scrooge,parquet-test-hadoop2,parquet-thrift,pig,protobuf-java,servlet-api,slf4j-api,slf4j-log4j12,snappy-java,stax-api,xmlenc,xz,zookeeper
+					</excludeArtifactIds>
+					<overWriteReleases>false</overWriteReleases>
+					<overWriteSnapshots>false</overWriteSnapshots>
+					<overWriteIfNewer>true</overWriteIfNewer>
+					<includeScope>runtime</includeScope>
+					<!--excludeTransitive>false</excludeTransitive-->
+					<stripVersion>false</stripVersion>
+					<excludeScope>provided</excludeScope>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+
+				</configuration>
+				<executions>
+					<execution>
+						<id>assemble-all</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
