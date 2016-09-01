@@ -10,19 +10,19 @@ public class RandomGenerator implements RandomGeneratorService {
     private String seq;
     private String baseName;
     private int sequence = 0;
-    private Random rnd;
+    private Random rnd = new Random();
 
     private String[] countries={"Switzerland", "France", "Germany", "United States", "Spain", "Portugal", "Ethiopia", "Norway"};
     private String[] currencies={"CHF","EUR", "USD"};
-    private Merchant[] merchantArray;
-    private CreditCard[] creditCardsArray;
+    private Merchant[] merchantArray = new Merchant[1000];
+    private CreditCard[] creditCardsArray= new CreditCard[1000];
 
    public RandomGenerator(){
-       new RandomGenerator(1000,10000);
+       new RandomGenerator(1000,1000);
    }
 
     public RandomGenerator(int nbrMarchant, int nbrCreditCard) {
-        baseName = rnd.nextInt() + "-";
+        baseName =  "executor1-";
         seq = baseName + sequence++;
         init(nbrMarchant, nbrCreditCard);
     }
@@ -36,8 +36,8 @@ public class RandomGenerator implements RandomGeneratorService {
         long timestamp= System.currentTimeMillis();
         String currency =currencies[rnd.nextInt()%currencies.length];
         double amount = rnd.nextInt()/100;
-        Merchant merchant = merchantArray[rnd.nextInt()%merchantArray.length];
-        CreditCard creditCard = creditCardsArray[rnd.nextInt()%creditCardsArray.length];
+        Merchant merchant = merchantArray[rnd.nextInt(merchantArray.length)];
+        CreditCard creditCard = creditCardsArray[rnd.nextInt(creditCardsArray.length)];
 
 
         Transaction transaction = new Transaction(whiteListed, merchant.getMerchantId(), merchant.getMerchantCountry(), payload, seq, timestamp, currency, amount, creditCard.getCcv(),
@@ -51,7 +51,9 @@ public class RandomGenerator implements RandomGeneratorService {
 
         //generate nbrMarchant
         for (int i = 0; i < nbrMerchant; i++) {
-            Merchant merchant = new Merchant(String.valueOf(rnd.nextLong()), countries[rnd.nextInt()%countries.length]);
+            String merchantId = ""+rnd.nextLong();
+            String country = countries[rnd.nextInt(countries.length)];
+            Merchant merchant = new Merchant(merchantId, country);
             merchantArray[i]=merchant;
         }
 
@@ -60,9 +62,9 @@ public class RandomGenerator implements RandomGeneratorService {
         for (int i = 0; i < nbrCreditCard; i++) {
             int ccv = rnd.nextInt()%1000;
             String cardNumber = String.valueOf(rnd.nextLong());//TODO Find a better way with fix length
-            String expiration = (rnd.nextInt()%12+1) +"/20"+(rnd.nextInt()%10+16);
+            String expiration = (rnd.nextInt(12)+1 +"/20"+(rnd.nextInt()%10+16));
             String name = String.valueOf(rnd.nextLong());//TODO with name generator
-            String clientCountry = countries[rnd.nextInt()%countries.length];
+            String clientCountry = countries[rnd.nextInt(countries.length)];
             creditCardsArray[i]= new CreditCard(ccv,cardNumber,expiration,name,clientCountry);
 
         }
