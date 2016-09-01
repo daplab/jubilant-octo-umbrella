@@ -40,7 +40,7 @@ public class RateLimiter implements Func1<byte[], byte[]> {
                 long sleepTime = TimeUnit.SECONDS.toMillis(1) + startTime - currentTime;
 
                 if (sleepTime > 0) {
-                    LOG.info("Alread {} message, sleeping {} ms", counter, sleepTime);
+                    LOG.info("Woawww, already {} message! Sleeping {} ms...", counter, sleepTime);
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
@@ -52,7 +52,6 @@ public class RateLimiter implements Func1<byte[], byte[]> {
             }
 
         }
-
 
         return tx;
 
