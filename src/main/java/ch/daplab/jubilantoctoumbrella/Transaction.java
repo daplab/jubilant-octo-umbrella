@@ -12,14 +12,14 @@ public class Transaction {
 	private String currency;
 	private double amount;
 
-	private byte ccv;
+	private int ccv;
 	private String cardNumber;
 	private String expiration;
 	private String name;
 	private String clientCountry;
 
 	public Transaction(boolean whiteListed, String merchantId, String merchantCountry, String payload, String seq,
-			long timestamp, String currency, double amount, byte ccv, String cardNumber, String expiration, String name,
+			long timestamp, String currency, double amount, int ccv, String cardNumber, String expiration, String name,
 			String clientCountry) {
 		super();
 		this.whiteListed = whiteListed;
@@ -101,11 +101,11 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public byte getCcv() {
+	public int getCcv() {
 		return ccv;
 	}
 
-	public void setCcv(byte ccv) {
+	public void setCcv(int ccv) {
 		this.ccv = ccv;
 	}
 
