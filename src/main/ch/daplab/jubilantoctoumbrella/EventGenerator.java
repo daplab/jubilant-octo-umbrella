@@ -2,11 +2,9 @@ package ch.daplab.jubilantoctoumbrella;
 
 import rx.Observable;
 
-import ch.daplab.jubilantoctoumbrella.RandomGenerator;
-
 public class EventGenerator {
-	private RandomGenerator generator;
-	public EventGenerator(RandomGenerator generator) {
+	private RandomGeneratorService generator;
+	public EventGenerator(RandomGeneratorService generator) {
 		this.generator = generator;
 	}
 	
@@ -17,7 +15,6 @@ public class EventGenerator {
 	                while (true) {
 	                    observer.onNext(generator.getRndTransaction());
 	                }
-	                observer.onCompleted();
 	            }
 	        } catch (Exception e) {
 	            observer.onError(e);
