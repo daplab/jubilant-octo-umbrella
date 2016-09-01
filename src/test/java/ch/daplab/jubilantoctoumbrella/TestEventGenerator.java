@@ -10,16 +10,18 @@ import org.junit.Test;
 public class TestEventGenerator {
 
 	private EventGenerator generator;
+	private EventGenerator generator2;
 
 	@Before
 	public void initObjects() {
 		generator = new EventGenerator(new DummyRandomGenerator());
+		generator2 = new EventGenerator(new RandomGenerator());
 	}
 
 	@Test
 	public void shouldGenerateInfiniteTransactionStream() {
 		ArrayList<String> transactions = new ArrayList<String>();
-		generator.getTransactions().take(5).subscribe(transaction -> {
+		generator2.getTransactions().take(5).subscribe(transaction -> {
 			transactions.add(transaction.getSeq());
 		}, err -> fail(), () -> assertEquals(transactions.size(), 5));
 	}
