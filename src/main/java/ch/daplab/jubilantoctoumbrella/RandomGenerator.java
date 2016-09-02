@@ -9,22 +9,25 @@ public class RandomGenerator implements RandomGeneratorService {
 
     private String seq;
     private String baseName;
-    private int sequence = 0;
+    private int sequence = 1;
     private Random rnd = new Random();
 
     private String[] countries={"Switzerland", "France", "Germany", "United States", "Spain", "Portugal", "Ethiopia", "Norway"};
     private String[] currencies={"CHF","EUR", "USD"};
-    private Merchant[] merchantArray = new Merchant[1000];
-    private CreditCard[] creditCardsArray= new CreditCard[1000];
+    private Merchant[] merchantArray;
+    private CreditCard[] creditCardsArray;
 
    public RandomGenerator(){
-       new RandomGenerator(1000,1000);
+       this(1000,10000);
    }
 
     public RandomGenerator(int nbrMarchant, int nbrCreditCard) {
         baseName =  "executor1-";
         seq = baseName + sequence++;
+        creditCardsArray= new CreditCard[nbrCreditCard];
+        merchantArray = new Merchant[nbrMarchant];
         init(nbrMarchant, nbrCreditCard);
+
     }
 
     public Transaction getRndTransaction() {
@@ -34,11 +37,11 @@ public class RandomGenerator implements RandomGeneratorService {
         //TODO payload with dynamic size.
         String payload = String.valueOf(rnd.nextDouble());
         long timestamp= System.currentTimeMillis();
-        String currency =currencies[rnd.nextInt()%currencies.length];
+        String currency =currencies[rnd.nextInt(currencies.length)];
         double amount = rnd.nextInt()/100;
         Merchant merchant = merchantArray[rnd.nextInt(merchantArray.length)];
         CreditCard creditCard = creditCardsArray[rnd.nextInt(creditCardsArray.length)];
-
+        seq = baseName + sequence++;
 
         Transaction transaction = new Transaction(whiteListed, merchant.getMerchantId(), merchant.getMerchantCountry(), payload, seq, timestamp, currency, amount, creditCard.getCcv(),
                 creditCard.getCardNumber(), creditCard.getExpiration(), creditCard.getName(), creditCard.getClientCountry());
@@ -60,7 +63,7 @@ public class RandomGenerator implements RandomGeneratorService {
         // generate creditcards
 
         for (int i = 0; i < nbrCreditCard; i++) {
-            int ccv = rnd.nextInt()%1000;
+            int ccv = rnd.nextInt(1000);
             String cardNumber = String.valueOf(rnd.nextLong());//TODO Find a better way with fix length
             String expiration = (rnd.nextInt(12)+1 +"/20"+(rnd.nextInt()%10+16));
             String name = String.valueOf(rnd.nextLong());//TODO with name generator
