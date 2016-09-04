@@ -206,7 +206,6 @@ in 14... -->
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-
 				</configuration>
 				<executions>
 					<execution>
