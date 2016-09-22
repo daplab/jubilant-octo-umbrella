@@ -68,7 +68,7 @@ public class RandomGenerator implements RandomGeneratorService {
             String expiration = (rnd.nextInt(12)+1 +"/20"+(rnd.nextInt()%10+16));
             String name = String.valueOf(rnd.nextLong());//TODO with name generator
             String clientCountry = countries[rnd.nextInt(countries.length)];
-            creditCardsArray[i]= new CreditCard(ccv,cardNumber,expiration,name,clientCountry);
+            creditCardsArray[i]= new CreditCard(ccv,cardNumber,expiration,clientCountry,name);
 
         }
 
