@@ -6,6 +6,13 @@
 	<groupId>ch.daplab</groupId>
 	<artifactId>jubilant-octo-umbrella</artifactId>
 	<version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+	<modules>
+		<module>kafka-starter</module>
+		<module>cc-generator</module>
+		<module>01-spark-streaming</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,11 +26,10 @@
 		<maven.rpm.plugin.version>2.1.5</maven.rpm.plugin.version>
 		<maven.build-helper.plugin.version>1.10</maven.build-helper.plugin.version>
 		<apache.hadoop.version>2.7.1.2.4.2.0-258</apache.hadoop.version>
-		<guava.version>13.0.1</guava.version>
 
 		<rpm.license>2016, DAPLAB</rpm.license>
 		<rpm.group>Application/DAPLAB</rpm.group>
-		<rpm.rootprefix>/opt/daplab/cc-generator</rpm.rootprefix>
+		<rpm.rootprefix>/opt/daplab/${project.artifactId}</rpm.rootprefix>
 		<rpm.apprefix>${rpm.rootprefix}</rpm.apprefix>
 		<rpm.username>daplab_prod</rpm.username>
 		<rpm.groupname>daplab_prod</rpm.groupname>
@@ -32,8 +38,9 @@
 		<rpm.path>${rpm.apprefix}</rpm.path>
 		<rpm.appname>${project.artifactId}</rpm.appname>
 		<rpm.basedir>${project.artifactId}</rpm.basedir>
-		<rpm.distribution>CC-Generator</rpm.distribution>
+		<rpm.distribution>${project.artifactId}</rpm.distribution>
 	</properties>
+
 	<repositories>
 		<repository>
 			<id>Maven Central Repo</id>
@@ -79,24 +86,52 @@
 				<artifactId>hadoop-yarn-api</artifactId>
 				<version>${apache.hadoop.version}</version>
 			</dependency>
-			<!-- Twill requires Guava > 14
-because of AbstractExecutionThreadService.getServiceName
-being renamed in AbstractExecutionThreadService.serviceName
-in 14... -->
 			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
+				<groupId>io.reactivex</groupId>
+				<artifactId>rxjava</artifactId>
+				<version>1.1.9</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka_2.10</artifactId>
+				<version>0.9.0.2.4.2.0-258</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka_2.10</artifactId>
+				<version>0.9.0.2.4.2.0-258</version>
+				<classifier>test</classifier>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.curator</groupId>
+				<artifactId>curator-framework</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jopt-simple</groupId>
+				<artifactId>jopt-simple</artifactId>
+				<version>5.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.4</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>2.8.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.8.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/io.reactivex/rxjava -->
-		<dependency>
-			<groupId>io.reactivex</groupId>
-			<artifactId>rxjava</artifactId>
-			<version>1.1.9</version>
-		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -108,248 +143,233 @@ in 14... -->
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
-			<version>0.9.0.2.4.2.0-258</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
-			<version>0.9.0.2.4.2.0-258</version>
-			<classifier>test</classifier>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-framework</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.jopt-simple</groupId>
-			<artifactId>jopt-simple</artifactId>
-			<version>5.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>io.reactivex</groupId>
-			<artifactId>rxjava</artifactId>
-			<version>1.1.9</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.8.2</version>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.10</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.8.2</version>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.10</artifactId>
+			<classifier>test</classifier>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.version}</version>
-				<configuration>
-					<source>${maven.compiler.source}</source>
-					<target>${maven.compiler.target}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<outputDirectory>${project.build.directory}/lib</outputDirectory>
-					<!--
-					  See here for more details https://gist.github.com/killerwhile/95c49fb0af0e938de222
-					  Note that metrics-core has been removed from the exlusion list since
-					  Kafka requires com.yammer.mertrics-core package, i.e. the artifactId is conflicting.
-					  Guava is excluded because the Hadoop version of Guava is fine if we're not using Twill.
-					-->
-					<excludeArtifactIds>
-					    guava,activation,aopalliance,apacheds-i18n,apacheds-kerberos-codec,api-asn1-api,api-util,asm,avro,aws-java-sdk,azure-storage,commons-beanutils,commons-beanutils-core,commons-cli,commons-codec,commons-collections,commons-collections4,commons-compress,commons-configuration,commons-daemon,commons-digester,commons-httpclient,commons-io,commons-lang,commons-lang3,commons-logging,commons-math3,commons-net,curator-client,curator-framework,curator-recipes,fst,gson,guice,guice-servlet,hadoop-annotations,hadoop-ant,hadoop-archives,hadoop-auth,hadoop-aws,hadoop-azure,hadoop-common,hadoop-datajoin,hadoop-distcp,hadoop-extras,hadoop-gridmix,hadoop-hdfs,hadoop-hdfs-nfs,hadoop-mapreduce-client-app,hadoop-mapreduce-client-common,hadoop-mapreduce-client-core,hadoop-mapreduce-client-hs,hadoop-mapreduce-client-hs-plugins,hadoop-mapreduce-client-jobclient,hadoop-mapreduce-client-shuffle,hadoop-mapreduce-examples,hadoop-nfs,hadoop-openstack,hadoop-rumen,hadoop-sls,hadoop-streaming,hadoop-yarn-api,hadoop-yarn-applications-distributedshell,hadoop-yarn-applications-unmanaged-am-launcher,hadoop-yarn-client,hadoop-yarn-common,hadoop-yarn-registry,hadoop-yarn-server-applicationhistoryservice,hadoop-yarn-server-common,hadoop-yarn-server-nodemanager,hadoop-yarn-server-resourcemanager,hadoop-yarn-server-sharedcachemanager,hadoop-yarn-server-tests,hadoop-yarn-server-timeline-plugins,hadoop-yarn-server-web-proxy,hamcrest-core,htrace-core,httpclient,httpcore,jackson-annotations,jackson-core,jackson-core-asl,jackson-databind,jackson-jaxrs,jackson-mapper-asl,jackson-xc,java-xmlbuilder,javassist,javax.inject,jaxb-api,jaxb-impl,jersey-client,jersey-core,jersey-guice,jersey-json,jersey-server,jets3t,jettison,jetty,jetty-util,joda-time,jsch,jsp-api,jsr305,jubilant-octo-umbrella,junit,leveldbjni-all,log4j,microsoft-windowsazure-storage-sdk,mockito-all,netty,netty-all,objenesis,okhttp,okio,paranamer,protobuf-java,ranger-hdfs-plugin-shim,ranger-plugin-classloader,ranger-yarn-plugin-shim,servlet-api,slf4j-api,slf4j-log4j12,snappy-java,spark,stax-api,tez-api,tez-common,tez-dag,tez-examples,tez-history-parser,tez-mapreduce,tez-runtime-internals,tez-runtime-library,tez-tests,tez-yarn-timeline-cache-plugin,tez-yarn-timeline-history,tez-yarn-timeline-history-with-acls,tez-yarn-timeline-history-with-fs,xercesImpl,xml-apis,xmlenc,xz,zookeeper
-					</excludeArtifactIds>
-					<overWriteReleases>false</overWriteReleases>
-					<overWriteSnapshots>false</overWriteSnapshots>
-					<overWriteIfNewer>true</overWriteIfNewer>
-					<includeScope>runtime</includeScope>
-					<!--excludeTransitive>false</excludeTransitive-->
-					<stripVersion>false</stripVersion>
-					<excludeScope>provided</excludeScope>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>assemble-all</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>${maven.build-helper.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>parse-version</id>
-						<goals>
-							<goal>parse-version</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>rpm-maven-plugin</artifactId>
-				<version>${maven.rpm.plugin.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>attached-rpm</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<license>${rpm.license}</license>
-					<distribution>${rpm.distribution}</distribution>
-					<group>${rpm.group}</group>
-					<needarch>${rpm.targetArch}</needarch>
-					<classifier>${rpm.targetos}.${rpm.targetArch}</classifier>
-					<name>${rpm.appname}</name>
-					<version>
-						${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
-					</version>
-					<release>${rpmRelease}</release>
-					<defineStatements>
-						<defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
-						<defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
-					</defineStatements>
-					<mappings>
-						<mapping>
-							<directory>${rpm.apprefix}</directory>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-						</mapping>
-						<!-- Top level directory -->
-						<mapping>
-							<directory>${rpm.path}</directory>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-						</mapping>
-						<mapping>
-							<directory>${rpm.path}/bin</directory>
-							<recurseDirectories>true</recurseDirectories>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-						</mapping>
-						<mapping>
-							<configuration>true</configuration>
-							<directory>${rpm.path}/config</directory>
-							<recurseDirectories>true</recurseDirectories>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-						</mapping>
-						<mapping>
-							<directory>${rpm.path}/lib</directory>
-							<recurseDirectories>true</recurseDirectories>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-							<sources>
-								<source>
-									<location>${project.build.directory}/${project.artifactId}-${project.version}.jar
-									</location>
-								</source>
-								<source>
-									<location>${project.build.directory}/lib/</location>
-								</source>
-								<softlinkSource>
-									<destination>${project.artifactId}.jar</destination>
-									<location>${project.artifactId}-${project.version}.jar</location>
-								</softlinkSource>
-							</sources>
-						</mapping>
-						<mapping>
-							<directory>${rpm.path}/logs</directory>
-							<recurseDirectories>true</recurseDirectories>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-						</mapping>
-						<mapping>
-							<configuration>true</configuration>
-							<directory>${rpm.path}/config</directory>
-							<directoryIncluded>false</directoryIncluded>
-							<filemode>0644</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-							<sources>
-								<source>
-									<location>${project.basedir}/src/main/config</location>
-								</source>
-							</sources>
-						</mapping>
-						<mapping>
-							<directory>${rpm.path}/bin</directory>
-							<directoryIncluded>false</directoryIncluded>
-							<filemode>0755</filemode>
-							<username>${rpm.username}</username>
-							<groupname>${rpm.groupname}</groupname>
-							<sources>
-								<source>
-									<location>${project.basedir}/src/main/bin</location>
-									<!-- This prevents RPM python build failure on Jenkins -->
-									<excludes>
-										<exclude>*.pyc</exclude>
-										<exclude>*.pyo</exclude>
-									</excludes>
-								</source>
-							</sources>
-						</mapping>
-					</mappings>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>rpm-maven-plugin</artifactId>
+                    <version>${maven.rpm.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>attached-rpm</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <license>${rpm.license}</license>
+                        <distribution>${rpm.distribution}</distribution>
+                        <group>${rpm.group}</group>
+                        <needarch>${rpm.targetArch}</needarch>
+                        <classifier>${rpm.targetos}.${rpm.targetArch}</classifier>
+                        <name>${rpm.appname}</name>
+                        <version>
+                            ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+                        </version>
+                        <release>${rpmRelease}</release>
+                        <defineStatements>
+                            <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
+                            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                        </defineStatements>
+                        <mappings>
+                            <mapping>
+                                <directory>${rpm.apprefix}</directory>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                            </mapping>
+                            <!-- Top level directory -->
+                            <mapping>
+                                <directory>${rpm.path}</directory>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                            </mapping>
+                            <mapping>
+                                <directory>${rpm.path}/bin</directory>
+                                <recurseDirectories>true</recurseDirectories>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                            </mapping>
+                            <mapping>
+                                <configuration>true</configuration>
+                                <directory>${rpm.path}/config</directory>
+                                <recurseDirectories>true</recurseDirectories>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                            </mapping>
+                            <mapping>
+                                <directory>${rpm.path}/lib</directory>
+                                <recurseDirectories>true</recurseDirectories>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                                <sources>
+                                    <source>
+                                        <location>
+                                            ${project.build.directory}/${project.artifactId}-${project.version}.jar
+                                        </location>
+                                    </source>
+                                    <source>
+                                        <location>${project.build.directory}/lib/</location>
+                                    </source>
+                                    <softlinkSource>
+                                        <destination>${project.artifactId}.jar</destination>
+                                        <location>${project.artifactId}-${project.version}.jar</location>
+                                    </softlinkSource>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>${rpm.path}/logs</directory>
+                                <recurseDirectories>true</recurseDirectories>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                            </mapping>
+                            <mapping>
+                                <configuration>true</configuration>
+                                <directory>${rpm.path}/config</directory>
+                                <directoryIncluded>false</directoryIncluded>
+                                <filemode>0644</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                                <sources>
+                                    <source>
+                                        <location>${project.basedir}/src/main/config</location>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>${rpm.path}/bin</directory>
+                                <directoryIncluded>false</directoryIncluded>
+                                <filemode>0755</filemode>
+                                <username>${rpm.username}</username>
+                                <groupname>${rpm.groupname}</groupname>
+                                <sources>
+                                    <source>
+                                        <location>${project.basedir}/src/main/bin</location>
+                                        <!-- This prevents RPM python build failure on Jenkins -->
+                                        <excludes>
+                                            <exclude>*.pyc</exclude>
+                                            <exclude>*.pyo</exclude>
+                                        </excludes>
+                                    </source>
+                                </sources>
+                            </mapping>
+                        </mappings>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                    <!--
+                      See here for more details https://gist.github.com/killerwhile/95c49fb0af0e938de222
+                      Note that metrics-core has been removed from the exlusion list since
+                      Kafka requires com.yammer.mertrics-core package, i.e. the artifactId is conflicting.
+                      Guava is excluded because the Hadoop version of Guava is fine if we're not using Twill.
+                    -->
+                    <excludeArtifactIds>
+                        guava,activation,aopalliance,apacheds-i18n,apacheds-kerberos-codec,api-asn1-api,api-util,asm,avro,aws-java-sdk,azure-storage,commons-beanutils,commons-beanutils-core,commons-cli,commons-codec,commons-collections,commons-collections4,commons-compress,commons-configuration,commons-daemon,commons-digester,commons-httpclient,commons-io,commons-lang,commons-lang3,commons-logging,commons-math3,commons-net,curator-client,curator-framework,curator-recipes,fst,gson,guice,guice-servlet,hadoop-annotations,hadoop-ant,hadoop-archives,hadoop-auth,hadoop-aws,hadoop-azure,hadoop-common,hadoop-datajoin,hadoop-distcp,hadoop-extras,hadoop-gridmix,hadoop-hdfs,hadoop-hdfs-nfs,hadoop-mapreduce-client-app,hadoop-mapreduce-client-common,hadoop-mapreduce-client-core,hadoop-mapreduce-client-hs,hadoop-mapreduce-client-hs-plugins,hadoop-mapreduce-client-jobclient,hadoop-mapreduce-client-shuffle,hadoop-mapreduce-examples,hadoop-nfs,hadoop-openstack,hadoop-rumen,hadoop-sls,hadoop-streaming,hadoop-yarn-api,hadoop-yarn-applications-distributedshell,hadoop-yarn-applications-unmanaged-am-launcher,hadoop-yarn-client,hadoop-yarn-common,hadoop-yarn-registry,hadoop-yarn-server-applicationhistoryservice,hadoop-yarn-server-common,hadoop-yarn-server-nodemanager,hadoop-yarn-server-resourcemanager,hadoop-yarn-server-sharedcachemanager,hadoop-yarn-server-tests,hadoop-yarn-server-timeline-plugins,hadoop-yarn-server-web-proxy,hamcrest-core,htrace-core,httpclient,httpcore,jackson-annotations,jackson-core,jackson-core-asl,jackson-databind,jackson-jaxrs,jackson-mapper-asl,jackson-xc,java-xmlbuilder,javassist,javax.inject,jaxb-api,jaxb-impl,jersey-client,jersey-core,jersey-guice,jersey-json,jersey-server,jets3t,jettison,jetty,jetty-util,joda-time,jsch,jsp-api,jsr305,jubilant-octo-umbrella,junit,leveldbjni-all,log4j,microsoft-windowsazure-storage-sdk,mockito-all,netty,netty-all,objenesis,okhttp,okio,paranamer,protobuf-java,ranger-hdfs-plugin-shim,ranger-plugin-classloader,ranger-yarn-plugin-shim,servlet-api,slf4j-api,slf4j-log4j12,snappy-java,spark,stax-api,tez-api,tez-common,tez-dag,tez-examples,tez-history-parser,tez-mapreduce,tez-runtime-internals,tez-runtime-library,tez-tests,tez-yarn-timeline-cache-plugin,tez-yarn-timeline-history,tez-yarn-timeline-history-with-acls,tez-yarn-timeline-history-with-fs,xercesImpl,xml-apis,xmlenc,xz,zookeeper
+                    </excludeArtifactIds>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>false</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <includeScope>runtime</includeScope>
+                    <!--excludeTransitive>false</excludeTransitive-->
+                    <stripVersion>false</stripVersion>
+                    <excludeScope>provided</excludeScope>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${maven.build-helper.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
