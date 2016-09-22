@@ -14,11 +14,30 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <properties>
+            <spark.version>1.6.1.2.4.2.0-258</spark.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${scala.version}</artifactId>
-            <version>1.5.2.2.3.4.0-3485</version>
+            <artifactId>spark-core_2.10</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.10</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka_2.10</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-yarn_2.10</artifactId>
+            <version>${spark.version}</version>
         </dependency>
     </dependencies>
 
