@@ -25,7 +25,8 @@
 		<maven.compiler.version>3.5.1</maven.compiler.version>
 		<maven.rpm.plugin.version>2.1.5</maven.rpm.plugin.version>
 		<maven.build-helper.plugin.version>1.10</maven.build-helper.plugin.version>
-		<apache.hadoop.version>2.7.1.2.4.2.0-258</apache.hadoop.version>
+        <apache.hadoop.version>2.7.1.2.4.2.0-258</apache.hadoop.version>
+        <scala.version>2.11</scala.version>
 
 		<rpm.license>2016, DAPLAB</rpm.license>
 		<rpm.group>Application/DAPLAB</rpm.group>
@@ -93,12 +94,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.kafka</groupId>
-				<artifactId>kafka_2.10</artifactId>
+				<artifactId>kafka_${scala.version}</artifactId>
 				<version>0.9.0.2.4.2.0-258</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.kafka</groupId>
-				<artifactId>kafka_2.10</artifactId>
+				<artifactId>kafka_${scala.version}</artifactId>
 				<version>0.9.0.2.4.2.0-258</version>
 				<classifier>test</classifier>
 				<scope>test</scope>
@@ -161,11 +162,11 @@
         </dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
+			<artifactId>kafka_${scala.version}</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
+			<artifactId>kafka_${scala.version}</artifactId>
 			<classifier>test</classifier>
 			<scope>test</scope>
 		</dependency>
