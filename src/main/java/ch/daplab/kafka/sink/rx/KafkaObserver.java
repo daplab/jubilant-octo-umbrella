@@ -1,8 +1,7 @@
 package ch.daplab.kafka.sink.rx;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observer;
@@ -21,20 +20,20 @@ public class KafkaObserver implements Observer<byte[]> {
     private final AtomicBoolean closeRef = new AtomicBoolean(false);
 
     private final String topic;
-    private final Producer producer;
+    private final KafkaProducer producer;
 
     public KafkaObserver(String topic, String brokerList) {
         this.topic = topic;
 
         Properties props = new Properties();
 
-        props.put("metadata.broker.list", brokerList);
-        props.put("serializer.class", "kafka.serializer.DefaultEncoder");
-        props.put("request.required.acks", "1");
+        props.put("bootstrap.servers", brokerList);
+        props.put("acks", "0");
+//        props.put("retries", 0);
+        props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
 
-        ProducerConfig producerConfig = new ProducerConfig(props);
-
-        producer = new Producer(producerConfig);
+        producer = new KafkaProducer(props);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class KafkaObserver implements Observer<byte[]> {
             return;
         }
 
-        KeyedMessage<Integer, byte[]> data = new KeyedMessage<>(topic, buffer);
+        ProducerRecord<Integer, byte[]> data = new ProducerRecord<>(topic, buffer);
         producer.send(data);
 
     }

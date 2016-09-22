@@ -25,15 +25,12 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractAppLauncher implements Tool, Closeable {
 
-    public static final String OPTION_ZK_CONNECT = "zk.connect";
     protected static final String OPTION_HELP = "help";
 
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     private final OptionParser parser = new OptionParser();
 
-    private CuratorFramework curatorFramework;
     private OptionSet options;
-    private String zkConnect;
     private Configuration conf;
 
 
@@ -45,14 +42,6 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
         return parser;
     }
 
-    protected String getZkConnect() {
-        return zkConnect;
-    }
-
-
-    protected final CuratorFramework getCuratorFramework() {
-        return curatorFramework;
-    }
 
     @Override
     public final int run(String[] args) throws Exception {
@@ -73,33 +62,16 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
             return ReturnCode.HELP;
         }
 
-        zkConnect = (String) options.valueOf(OPTION_ZK_CONNECT);
+        internalRun();
 
-        curatorFramework = CuratorFrameworkFactory.builder()
-                .connectString(zkConnect)
-                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
-                .build();
-        curatorFramework.start();
-
-
-        boolean zkConnectionOk = getCuratorFramework().blockUntilConnected(5, TimeUnit.SECONDS);
-        if (!zkConnectionOk) {
-            System.err.println("Can't connect to zookeeper. Please check the --" + OPTION_ZK_CONNECT + " and retry");
-            return ReturnCode.CANNOT_CONNECT_TO_ZK;
-        }
-
-        return internalRun();
-
+        return ReturnCode.ALL_GOOD;
     }
 
     protected abstract int internalRun() throws Exception;
 
+
     private void privateInitParser() {
-        getParser().accepts(OPTION_ZK_CONNECT, "List of ZK host:port hosts, comma-separated.")
-                .withRequiredArg().required();
-
         initParser();
-
         getParser().accepts(OPTION_HELP, "Print this help").isForHelp();
     }
 
@@ -123,7 +95,6 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
     @Override
     public final void close() throws IOException {
         internalClose();
-        getCuratorFramework().close();
     }
 
     /**

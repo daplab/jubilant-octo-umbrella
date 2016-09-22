@@ -1,0 +1,23 @@
+
+{
+  "schemaVersion": "2.1",
+  "application": {
+    "name": "cc-generator",
+    "components": [
+      {
+        "name": "cc-generator",
+        "commands": [
+          {
+            "exec": "/usr/jdk64/jdk1.7.0_67/bin/java -classpath /usr/myapps/memcached/*:/usr/hadoop/lib/* com.thimbleware.jmemcached.Main"
+          }
+        ]
+      }
+    ],
+    "packages": [
+      {
+        "type": "folder",
+        "name": "scripts/cc-generator.py"
+      }
+    ]
+  }
+}
