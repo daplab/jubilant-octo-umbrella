@@ -58,11 +58,11 @@ public abstract class AbstractZKAppLauncher extends AbstractAppLauncher {
             return ReturnCode.CANNOT_CONNECT_TO_ZK;
         }
 
-        return internalRunWithZk();
+        return internalRunWithZk(zkConnect);
 
     }
 
-    protected abstract int internalRunWithZk() throws Exception;
+    protected abstract int internalRunWithZk(String zkConnect) throws Exception;
 
 
 

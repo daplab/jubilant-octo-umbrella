@@ -1,5 +1,7 @@
 package ch.daplab.jubilantoctoumbrella;
 
+import ch.daplab.jubilantoctoumbrella.model.Transaction;
+
 import java.util.Random;
 
 /**

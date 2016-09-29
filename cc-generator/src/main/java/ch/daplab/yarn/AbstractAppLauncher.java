@@ -67,6 +67,7 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
         return ReturnCode.ALL_GOOD;
     }
 
+
     protected abstract int internalRun() throws Exception;
 
 
@@ -74,6 +75,7 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
         initParser();
         getParser().accepts(OPTION_HELP, "Print this help").isForHelp();
     }
+
 
     /**
      * Override this function to add more options to the command line parser.
@@ -97,6 +99,7 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
         internalClose();
     }
 
+
     /**
      * Override this function to close additional resources prior to closing the curator framework
      *
@@ -104,6 +107,7 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
      */
     protected void internalClose() throws IOException {
     }
+
 
     protected class ReturnCode {
         public static final int ALL_GOOD = 0;

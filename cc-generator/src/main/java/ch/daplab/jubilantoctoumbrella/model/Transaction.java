@@ -1,4 +1,4 @@
-package ch.daplab.jubilantoctoumbrella;
+package ch.daplab.jubilantoctoumbrella.model;
 
 public class Transaction {
 
@@ -17,6 +17,9 @@ public class Transaction {
 	private String expiration;
 	private String name;
 	private String clientCountry;
+
+//	 Add empty constructor to enable deserialization
+	public Transaction() {}
 
 	public Transaction(boolean whiteListed, String merchantId, String merchantCountry, String payload, String seq,
 			long timestamp, String currency, double amount, int ccv, String cardNumber, String expiration, String name,

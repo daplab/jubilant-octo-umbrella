@@ -1,5 +1,6 @@
 package ch.daplab.jubilantoctoumbrella;
 
+import ch.daplab.jubilantoctoumbrella.model.Transaction;
 import rx.Observable;
 
 public class EventGenerator {

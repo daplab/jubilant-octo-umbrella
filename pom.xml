@@ -26,7 +26,7 @@
 		<maven.rpm.plugin.version>2.1.5</maven.rpm.plugin.version>
 		<maven.build-helper.plugin.version>1.10</maven.build-helper.plugin.version>
         <apache.hadoop.version>2.7.1.2.4.2.0-258</apache.hadoop.version>
-        <scala.version>2.11</scala.version>
+        <scala.version>2.10</scala.version>
 
 		<rpm.license>2016, DAPLAB</rpm.license>
 		<rpm.group>Application/DAPLAB</rpm.group>
@@ -119,16 +119,16 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>3.4</version>
 			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>2.8.2</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>2.8.2</version>
-			</dependency>
+			<!--<dependency>-->
+				<!--<groupId>com.fasterxml.jackson.core</groupId>-->
+				<!--<artifactId>jackson-core</artifactId>-->
+				<!--<version>2.8.2</version>-->
+			<!--</dependency>-->
+			<!--<dependency>-->
+				<!--<groupId>com.fasterxml.jackson.core</groupId>-->
+				<!--<artifactId>jackson-databind</artifactId>-->
+				<!--<version>2.8.2</version>-->
+			<!--</dependency>-->
 		</dependencies>
 	</dependencyManagement>
 
@@ -152,15 +152,25 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+            <!--<artifactId>jackson-core</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+            <!--<artifactId>jackson-databind</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <version>2.4.4</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>2.4.4</version>
         </dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka_${scala.version}</artifactId>
 		</dependency>

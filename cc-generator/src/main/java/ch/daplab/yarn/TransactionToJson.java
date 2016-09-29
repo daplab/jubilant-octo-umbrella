@@ -3,7 +3,7 @@ package ch.daplab.yarn;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import rx.functions.Func1;
-import ch.daplab.jubilantoctoumbrella.Transaction;
+import ch.daplab.jubilantoctoumbrella.model.Transaction;
 
 /**
  * Created by bperroud on 01/09/16.

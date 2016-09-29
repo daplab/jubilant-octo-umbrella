@@ -1,24 +1,20 @@
 package ch.daplab.yarn;
 
-import ch.daplab.config.Config;
-import ch.daplab.jubilantoctoumbrella.DummyRandomGenerator;
 import ch.daplab.jubilantoctoumbrella.EventGenerator;
+import ch.daplab.jubilantoctoumbrella.RandomGenerator;
 import ch.daplab.kafka.sink.rx.KafkaObserver;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import rx.Observer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CCGeneratorCli extends AbstractAppLauncher {
+public class CCGeneratorCli extends AbstractKafkaWithTopicAppLauncher {
 
-    public static final String OPTION_KAFKA_CONNECT = "kafka.connect";
-    public static final String OPTION_TOPIC = "topic";
     public static final String OPTION_RATE_LIMIT = "rate.limit";
 
-    public static final Integer DEFAULT_RATE_LIMIT = 1000;
+    public static final Integer DEFAULT_RATE_LIMIT = 10;
 
     private final AtomicInteger atomicRateLimit = new AtomicInteger(DEFAULT_RATE_LIMIT);
 
@@ -28,11 +24,9 @@ public class CCGeneratorCli extends AbstractAppLauncher {
     }
 
     @Override
-    protected int internalRun() throws Exception {
+    protected int internalRunWithKafkaAndTopic(String topic, String brokerList) throws Exception {
 
-        final String topic = (String)getOptions().valueOf(OPTION_TOPIC);
         final Integer rateLimit = (Integer)getOptions().valueOf(OPTION_RATE_LIMIT);
-        final String brokerList = (String)getOptions().valueOf(OPTION_KAFKA_CONNECT);
 
         generateMessages(topic, brokerList, rateLimit);
 
@@ -45,7 +39,7 @@ public class CCGeneratorCli extends AbstractAppLauncher {
         updateRateLimit(rateLimit);
 
         Observer<byte[]> sink = new KafkaObserver(topic, brokerList);
-        EventGenerator eventGenerator = new EventGenerator(new DummyRandomGenerator());
+        EventGenerator eventGenerator = new EventGenerator(new RandomGenerator());
 
         eventGenerator.getTransactions().map(new TransactionToJson()).map(new RateLimiter(atomicRateLimit)).subscribe(sink);
 
@@ -54,10 +48,8 @@ public class CCGeneratorCli extends AbstractAppLauncher {
     @Override
     protected void initParser() {
 
-        getParser().accepts(OPTION_KAFKA_CONNECT, "List of KAfka host:port brokers, comma-separated.")
-                .withRequiredArg().defaultsTo(Config.brokerList);
-        getParser().accepts(OPTION_TOPIC, "Topic to publish messages to, must be created before hand")
-                .withRequiredArg().defaultsTo(Config.topic);
+        super.initParser();
+
         getParser().accepts(OPTION_RATE_LIMIT, "Rate limitation in msg/sec at which to inject messages.")
                 .withRequiredArg().ofType(Integer.class).defaultsTo(DEFAULT_RATE_LIMIT);
 
