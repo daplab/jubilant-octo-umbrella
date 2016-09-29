@@ -5,14 +5,19 @@ import org.apache.curator.framework.CuratorFramework;
 
 import java.io.IOException;
 
-public abstract class AbstractKafkaWithTopicAppLauncher extends AbstractAppLauncher {
+public abstract class AbstractZkAndKafkaAndTopicAppLauncher extends AbstractAppLauncher {
 
+    public static final String OPTION_ZK_CONNECT = "zk.connect";
     public static final String OPTION_KAFKA_CONNECT = "kafka.connect";
     public static final String OPTION_TOPIC = "topic";
 
+    private String zkConnect;
     private String topic;
     private String brokerList;
 
+    protected String getZkConnect() {
+        return zkConnect;
+    }
     protected String getBrokerList() {
         return brokerList;
     }
@@ -22,15 +27,16 @@ public abstract class AbstractKafkaWithTopicAppLauncher extends AbstractAppLaunc
     @Override
     public final int internalRun() throws Exception {
 
+        zkConnect = (String) getOptions().valueOf(OPTION_ZK_CONNECT);
         topic = (String)getOptions().valueOf(OPTION_TOPIC);
         brokerList = (String)getOptions().valueOf(OPTION_KAFKA_CONNECT);
 
-        return internalRunWithKafkaAndTopic(topic, brokerList);
+        return internalRunWithZkAndKafkaAndTopic(zkConnect, topic, brokerList);
 
     }
 
 
-    protected abstract int internalRunWithKafkaAndTopic(String topic, String brokerList) throws Exception;
+    protected abstract int internalRunWithZkAndKafkaAndTopic(String zkConnect, String topic, String brokerList) throws Exception;
 
 
     /**
@@ -39,11 +45,12 @@ public abstract class AbstractKafkaWithTopicAppLauncher extends AbstractAppLaunc
     protected void initParser() {
 
         super.initParser();
-
+        getParser().accepts(OPTION_ZK_CONNECT, "List of ZK host:port hosts, comma-separated.")
+                .withRequiredArg().required().defaultsTo(Config.zkConnect);
         getParser().accepts(OPTION_KAFKA_CONNECT, "List of KAfka host:port brokers, comma-separated.")
-                .withRequiredArg().defaultsTo(Config.brokerList);
+                .withRequiredArg().required().defaultsTo(Config.brokerList);
         getParser().accepts(OPTION_TOPIC, "Topic to publish messages to, must be created before hand")
-                .withRequiredArg().defaultsTo(Config.topic);
+                .withRequiredArg().required().defaultsTo(Config.topic);
     }
 
 
