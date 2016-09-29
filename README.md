@@ -25,4 +25,6 @@ This project aims at centralizing the source code written and deployed at this o
 
 
 1. Spark Streaming 1.6 
-2. Beam 0.2.0-incubating
+2. Flink 1.1.2
+...
+6. Beam 0.2.0-incubating
