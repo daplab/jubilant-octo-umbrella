@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by bperroud on 29/09/16.
  */
-public class TransactionDeserializer extends AbstractDeserializationSchema {
+public class TransactionDeserializer extends AbstractDeserializationSchema<Transaction> {
 
     private final ObjectMapper mapper = new ObjectMapper();
 

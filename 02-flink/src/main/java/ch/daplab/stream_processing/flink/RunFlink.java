@@ -2,14 +2,11 @@ package ch.daplab.stream_processing.flink;
 
 import ch.daplab.config.Config;
 import ch.daplab.jubilantoctoumbrella.model.Transaction;
-import ch.daplab.yarn.AbstractKafkaWithTopicAppLauncher;
-import ch.daplab.yarn.AbstractZKAppLauncher;
 import ch.daplab.yarn.AbstractZkAndKafkaAndTopicAppLauncher;
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -30,11 +27,9 @@ public class RunFlink extends AbstractZkAndKafkaAndTopicAppLauncher {
         System.exit(res);
     }
 
-    static String topic = Config.topic;
-
-
     @Override
-    protected int internalRunWithZkAndKafkaAndTopic(String zkConnect, String topic, String brokerList) throws Exception {
+    protected int internalRunWithZkAndKafkaAndTopic(
+            String zkConnect, String topic, String brokerList) throws Exception {
 
         String groupId = (String)getOptions().valueOf(OPTION_GROUP_ID);
         Properties properties = new Properties();
@@ -45,25 +40,30 @@ public class RunFlink extends AbstractZkAndKafkaAndTopicAppLauncher {
 
         StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        final DataStream<Transaction> dataStream = streamExecutionEnvironment.addSource(new FlinkKafkaConsumer<>(
+        final DataStream<Transaction> dataStream = streamExecutionEnvironment.addSource(new FlinkKafkaConsumer09<Transaction>(
                 topic,
                 new TransactionDeserializer(),
-                properties,
-                FlinkKafkaConsumer.OffsetStore.KAFKA,
-                FlinkKafkaConsumer.FetcherType.NEW_HIGH_LEVEL));
+                properties));
 
 
-        dataStream.rebalance()
+        dataStream
                 .map(t ->
                      String.format("%s %s=%f", t.getName())
                 )
-                .addSink(new SinkFunction<String>() {
-                    @Override
-                    public void invoke(String value) throws Exception {
-                        System.out.println(value);
-                    }
-                });
+                .addSink(s -> System.out.println(s));
 
+
+        Thread.sleep(20000000);
         return ReturnCode.ALL_GOOD;
+    }
+
+    @Override
+    protected void initParser() {
+
+        super.initParser();
+
+        getParser().accepts(OPTION_GROUP_ID, "Kafka group id to use.")
+                .withRequiredArg().defaultsTo(DEFAULT_GROUPE_ID);
+
     }
 }

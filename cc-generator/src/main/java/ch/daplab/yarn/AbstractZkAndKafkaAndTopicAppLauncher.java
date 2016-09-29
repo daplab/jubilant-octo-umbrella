@@ -46,11 +46,11 @@ public abstract class AbstractZkAndKafkaAndTopicAppLauncher extends AbstractAppL
 
         super.initParser();
         getParser().accepts(OPTION_ZK_CONNECT, "List of ZK host:port hosts, comma-separated.")
-                .withRequiredArg().required().defaultsTo(Config.zkConnect);
+                .withRequiredArg().defaultsTo(Config.zkConnect);
         getParser().accepts(OPTION_KAFKA_CONNECT, "List of KAfka host:port brokers, comma-separated.")
-                .withRequiredArg().required().defaultsTo(Config.brokerList);
+                .withRequiredArg().defaultsTo(Config.brokerList);
         getParser().accepts(OPTION_TOPIC, "Topic to publish messages to, must be created before hand")
-                .withRequiredArg().required().defaultsTo(Config.topic);
+                .withRequiredArg().defaultsTo(Config.topic);
     }
 
 
