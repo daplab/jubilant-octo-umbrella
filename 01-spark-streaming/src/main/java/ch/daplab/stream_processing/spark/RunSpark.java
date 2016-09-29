@@ -4,10 +4,11 @@ package ch.daplab.stream_processing.spark; /**
 
 import ch.daplab.config.Config;
 import ch.daplab.jubilantoctoumbrella.model.Transaction;
-import ch.daplab.yarn.AbstractKafkaWithTopicAppLauncher;
 import ch.daplab.yarn.AbstractZKAppLauncher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -29,6 +30,11 @@ public class RunSpark extends AbstractZKAppLauncher {
     public static final String OPTION_GROUP_ID = "group.id";
 
     public static final String DEFAULT_GROUPE_ID = "CC-Generator";
+
+    public static void main(String[] args) throws Exception {
+        int res = ToolRunner.run(new Configuration(), new RunSpark(), args);
+        System.exit(res);
+    }
 
     @Override
     protected int internalRunWithZk(String zkConnect) throws Exception {

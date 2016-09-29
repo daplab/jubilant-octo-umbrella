@@ -12,6 +12,7 @@
 		<module>kafka-starter</module>
 		<module>cc-generator</module>
 		<module>01-spark-streaming</module>
+		<module>02-flink</module>
 	</modules>
 
 	<properties>
