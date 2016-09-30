@@ -36,7 +36,7 @@ public class RateLimiter implements Func1<byte[], byte[]> {
         int limit = rateLimit.get();
         if (limit > 0) {
 
-            if (counter > limit) {
+            if (counter >= limit) {
                 long sleepTime = TimeUnit.SECONDS.toMillis(1) + startTime - currentTime;
 
                 if (sleepTime > 0) {

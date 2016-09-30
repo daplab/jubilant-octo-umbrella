@@ -12,24 +12,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <scala.version>2.11</scala.version>
+    </properties>
+
     <dependencies>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-stream</artifactId>
-            <version>4.0.5</version>
-        </dependency>
         <dependency>
             <groupId>info.batey.kafka</groupId>
             <artifactId>kafka-unit</artifactId>

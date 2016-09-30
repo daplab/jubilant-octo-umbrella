@@ -15,4 +15,7 @@ public class Config {
     public static String brokerList = "daplab-rt-11.fri.lan:6667,daplab-rt-12.fri.lan:6667,daplab-rt-13.fri.lan:6667,daplab-rt-14.fri.lan:6667";
     public static String topic = "daplab.cc.transactions";
 
+    public static String local_zkConnect = "localhost:28389";
+    public static String local_brokerList = "localhost:28387";
+
 }
