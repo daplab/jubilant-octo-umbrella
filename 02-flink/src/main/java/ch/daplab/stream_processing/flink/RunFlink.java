@@ -1,31 +1,19 @@
 package ch.daplab.stream_processing.flink;
 
-import ch.daplab.config.Config;
 import ch.daplab.jubilantoctoumbrella.model.Transaction;
 import ch.daplab.yarn.AbstractZkAndKafkaAndTopicAppLauncher;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.tuple.builder.Tuple3Builder;
-import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
-import org.apache.flink.api.java.typeutils.TypeExtractor;
-import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
-import org.apache.flink.streaming.util.serialization.AbstractDeserializationSchema;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.util.Properties;
 
-/**
- * Created by bperroud on 29/09/16.
- */
 public class RunFlink extends AbstractZkAndKafkaAndTopicAppLauncher {
 
 

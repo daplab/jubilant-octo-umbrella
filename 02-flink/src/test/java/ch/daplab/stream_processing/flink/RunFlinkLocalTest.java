@@ -3,9 +3,6 @@ package ch.daplab.stream_processing.flink;
 import ch.daplab.config.Config;
 import org.junit.Test;
 
-/**
- * Created by bperroud on 30/09/16.
- */
 public class RunFlinkLocalTest {
 
     @Test
