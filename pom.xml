@@ -13,6 +13,7 @@
 		<module>cc-generator</module>
 		<module>01-spark-streaming</module>
 		<module>02-flink</module>
+		<module>04-kafka-streams</module>
 	</modules>
 
 	<properties>
